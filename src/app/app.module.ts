@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule,
   MatSortModule, MatTableModule } from '@angular/material';
 import {HttpClientModule} from '@angular/common/http';
+import { TableModule } from './table/table.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,9 @@ import {HttpClientModule} from '@angular/common/http';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+
+    TableModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

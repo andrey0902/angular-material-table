@@ -24,7 +24,7 @@ export class LessonsDataSource implements DataSource<Lesson> {
   }
 
   loadLessons(courseId: number, filter = '',
-              sortDirection = 'asc', pageIndex = 0, pageSize = 3) {
+              sortDirection, pageIndex = 0, pageSize = 3) {
 
     this.loadingSubject.next(true);
 

@@ -40,14 +40,16 @@ export class CoursesService {
   }
 
   findLessons(
-    courseId: number, filter = '', sortOrder = 'asc',
+    courseId: number, filter = '',
+    sort: {active: string, direction: string},
     pageNumber = 0, pageSize = 3):  Observable<Lesson[]> {
 
     return this.http.get('/api/lessons', {
       params: new HttpParams()
         .set('courseId', courseId.toString())
         .set('filter', filter)
-        .set('sortOrder', sortOrder)
+        // TODO: need change next line .set(sort.active, sort.direction)
+        .set('sortOrder', sort.direction)
         .set('pageNumber', pageNumber.toString())
         .set('pageSize', pageSize.toString())
     }).pipe(
