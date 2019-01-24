@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs/index';
 import { Injectable } from '@angular/core';
 import { UsersService } from './users.service';
 import { DataResponse } from './model/data-response.mode';
+import { SortModel } from './model/sort.model';
 
 
 @Injectable()
@@ -30,7 +31,7 @@ export class CustomDataSource implements DataSource<any> {
     return this._sort;
   }
 
-  set sort(val: {active: string, direction: string}) {
+  set sort(val: SortModel) {
     this._sort = val;
     this.changeFilterSearch.next(0);
 
@@ -70,9 +71,9 @@ export class CustomDataSource implements DataSource<any> {
   loadingData(pagination?: any) {
     const dataFilter = {
       filter: this.filter,
-      sort: this.sort,
       pageIndex: pagination ? pagination.pageIndex : 0,
-      pageSize: pagination ? pagination.pageSize : this.pageSize
+      pageSize: pagination ? pagination.pageSize : this.pageSize,
+      ...this.sortPrepare(this.sort)
     };
     this.loadingSubject.next(true);
     this.userService.getUsers(dataFilter)
@@ -86,6 +87,16 @@ export class CustomDataSource implements DataSource<any> {
         this.loadingSubject.next(false);
         console.warn('error', error);
       });
+  }
+
+  private sortPrepare(sort: SortModel) {
+    if (sort && sort.direction !== '') {
+      return {
+        field: sort.active,
+        order: sort.direction
+      };
+    }
+    return {sort: null};
   }
 
 }
