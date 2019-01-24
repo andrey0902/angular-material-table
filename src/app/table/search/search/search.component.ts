@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, takeWhile } from 'rxjs/internal/operators';
-import { UsersSource } from '../../users-source';
+import { CustomDataSource } from '../../shared/custom-data-source';
 
 @Component({
   selector: 'app-search',
@@ -9,7 +9,7 @@ import { UsersSource } from '../../users-source';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  @Input() dataSource: UsersSource;
+  @Input() dataSource: CustomDataSource;
   @Input() placeholder = 'Search';
 
   @Output() changeSearch = new EventEmitter<string>();
@@ -35,12 +35,12 @@ export class SearchComponent implements OnInit, OnDestroy {
         distinctUntilChanged()
       )
       .subscribe((value) => {
-        // console.log('search value', value);
         const val = value ? value : '';
         this.changeSearch.emit(val);
         this.dataSource.filter = val;
       }, error => {
         console.warn(error);
+        this.dataSource.filter = '';
       });
   }
 

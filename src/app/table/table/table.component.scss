@@ -1,0 +1,19 @@
+.table-search {
+  padding: 15px 15px 0 15px;
+}
+
+.table_data {
+  background-color: white;
+  position: relative;
+}
+
+.spinner-container mat-spinner {
+
+  position: absolute;
+  left: calc( 50% - 50px);
+  top: calc( 50% - 50px);
+}
+
+.users-table {
+  min-height: 400px;
+}

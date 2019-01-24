@@ -1,47 +1,50 @@
-import { AfterContentInit, Component, ContentChild, Input, OnInit, ViewChild } from '@angular/core';
-import { SearchComponent } from '../search/search/search.component';
-import { DataSource } from '@angular/cdk/collections';
-import { MatPaginator, MatSort } from '@angular/material';
-import { UsersSource } from '../users-source';
+import { AfterViewInit, Component, ContentChild, Input, OnInit, ViewChild } from '@angular/core';
+
+import { MatSort } from '@angular/material';
 import { takeWhile, tap } from 'rxjs/internal/operators';
+import { CustomDataSource } from '../shared/custom-data-source';
+import { UsersService } from '../shared/users.service';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
   providers: [
-    UsersSource
+    CustomDataSource,
+    UsersService
   ]
 })
-export class TableComponent implements OnInit, AfterContentInit {
+export class TableComponent implements AfterViewInit {
 
-  @Input() displayedColumns: any[];
-
+  displayedColumns = ['email', 'registration', 'verification', 'membership', 'lastVisit'];
+  pageSize = 3;
+  pageSizeOptions = [3, 5, 10];
   @ViewChild(MatSort) sort: MatSort;
 
   componentActive = true;
 
-  // hardcode but need get from the server
-  course = {
-    id: 3,
-    lessonsCount: 8
-  };
-  constructor(public dataSource: UsersSource) { }
-
-  ngOnInit() {
+  constructor(public dataSource: CustomDataSource) {
   }
 
-  ngAfterContentInit() {
-    console.log(this.sort);
-    this.sort.sortChange
-      .pipe(
-        takeWhile(() => this.componentActive),
-        tap((val) => {
-          console.log('sort', val);
-          this.dataSource.sort = val;
-        })
-      )
-      .subscribe();
+  ngAfterViewInit() {
+    this.handleSorting();
   }
 
+  handleSorting() {
+    if (this.sort) {
+      this.sort.sortChange
+        .pipe(
+          takeWhile(() => this.componentActive),
+          tap((val) => {
+            console.log('sort', val);
+            this.dataSource.sort = val;
+          })
+        )
+        .subscribe();
+    }
+  }
+
+  onRowClicked(e) {
+    console.log( 'click row', e);
+  }
 }

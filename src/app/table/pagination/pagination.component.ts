@@ -1,5 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { UsersSource } from '../users-source';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { takeWhile } from 'rxjs/internal/operators';
 
@@ -8,32 +7,35 @@ import { takeWhile } from 'rxjs/internal/operators';
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })
-export class PaginationComponent implements OnInit, AfterViewInit {
-
+export class PaginationComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() pageSizeOptions: number[];
   @Input() pageSize: number;
-  @Input() dataSource: UsersSource;
+  @Input() dataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  itemCount = 0;
   componentActive = true;
-  course = {
-    lessonsCount: 8
-  }
   constructor() { }
 
   ngOnInit() {
   }
 
-
   ngAfterViewInit() {
-    this.handlingChangPagination();
-    this.setPagination();
+    this.checkExistAndHandling();
+    this.setIndexPage();
+    this.setLengthItems();
+  }
+
+  checkExistAndHandling() {
+    if (this.paginator) {
+      this.handlingChangPagination();
+    }
   }
 
   /**
-  * subscribe on change pagination and handling chang pagination
-  * */
+   * subscribe on change pagination and handling chang pagination
+   * */
   handlingChangPagination() {
     this.paginator.page
       .pipe(
@@ -50,11 +52,30 @@ export class PaginationComponent implements OnInit, AfterViewInit {
   /**
    * set pagination 0 after filtration or sort
    * */
-  setPagination() {
+  setIndexPage() {
     this.dataSource.changeSearch$
+      .pipe(
+        takeWhile(() => this.componentActive)
+      )
       .subscribe((val: number) => {
         this.paginator.pageIndex = val;
       });
+  }
+
+  /**
+   * set length of all items
+   * */
+
+  setLengthItems() {
+    this.dataSource
+      .length$
+      .subscribe((val: number) => {
+        this.itemCount = val;
+      });
+  }
+
+  ngOnDestroy() {
+    this.componentActive = false;
   }
 
 }

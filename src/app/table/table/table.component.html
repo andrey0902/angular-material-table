@@ -1,4 +1,4 @@
-<div class="course mat-elevation-z8">
+<div class="table_data mat-elevation-z8">
 
   <div class="table-search">
     <app-search [dataSource]="dataSource"></app-search>
@@ -8,31 +8,45 @@
     <mat-spinner></mat-spinner>
   </div>
 
-  <mat-table class="lessons-table"
+  <mat-table class="users-table"
              [dataSource]="dataSource"
              matSort
-             matSortActive="seqNo"
+             matSortActive="email"
              matSortDirection="asc"
              matSortDisableClear
   >
 
-    <ng-container matColumnDef="seqNo">
-      <mat-header-cell mat-sort-header *matHeaderCellDef>#</mat-header-cell>
-      <mat-cell *matCellDef="let lesson">{{lesson.seqNo}}</mat-cell>
+    <ng-container matColumnDef="email">
+      <mat-header-cell mat-sort-header *matHeaderCellDef>Email</mat-header-cell>
+      <mat-cell *matCellDef="let data">{{data.email}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="description">
-      <mat-header-cell mat-sort-header *matHeaderCellDef>Description</mat-header-cell>
+    <ng-container matColumnDef="registration">
+      <mat-header-cell mat-sort-header *matHeaderCellDef>Registration</mat-header-cell>
       <mat-cell class="description-cell"
-                *matCellDef="let lesson">{{lesson.description}}</mat-cell>
+                *matCellDef="let data">{{data.registration}}</mat-cell>
 
     </ng-container>
 
-    <ng-container matColumnDef="duration">
-      <mat-header-cell mat-sort-header *matHeaderCellDef>Duration</mat-header-cell>
+    <ng-container matColumnDef="verification">
+      <mat-header-cell mat-sort-header *matHeaderCellDef>Verification</mat-header-cell>
       <mat-cell class="duration-cell"
-                *matCellDef="let lesson">{{lesson.duration}}</mat-cell>
+                *matCellDef="let data">{{data.verification}}</mat-cell>
     </ng-container>
+
+    <ng-container matColumnDef="membership">
+      <mat-header-cell mat-sort-header *matHeaderCellDef>Membership</mat-header-cell>
+      <mat-cell class="duration-cell"
+                *matCellDef="let data">{{data.membership}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lastVisit">
+      <mat-header-cell mat-sort-header *matHeaderCellDef>Last visit</mat-header-cell>
+      <mat-cell class="duration-cell"
+                *matCellDef="let data">{{data.lastVisit}}</mat-cell>
+    </ng-container>
+
+
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
@@ -43,11 +57,11 @@
 
   </mat-table>
 
-  <!--<mat-paginator [length]="course?.lessonsCount" [pageSize]="3"-->
-                 <!--[pageSizeOptions]="[3, 5, 10]"></mat-paginator>-->
+
   <app-pagination [dataSource]="dataSource"
-                  [pageSize]="3"
-                  [pageSizeOptions]="[3, 5, 10]"
+                  [pageSize]="pageSize"
+                  [pageSizeOptions]="pageSizeOptions"
   ></app-pagination>
 </div>
+
 
